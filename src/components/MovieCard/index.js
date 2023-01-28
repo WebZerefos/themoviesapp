@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {memo} from 'react';
 
 const MovieCard = ({items, title}) => {
   return (
-    <View className="h-[200px] relative">
+    <>
       <View>
-        <Text className="items-start mb-3 text-xl font-semibold text-slate-700 ml-3">
+        <Text className="text-lg ml-6 my-2 font-semibold tracking-widest">
           {title}
         </Text>
       </View>
@@ -27,7 +27,7 @@ const MovieCard = ({items, title}) => {
               <TouchableOpacity>
                 <Image
                   resizeMode="cover"
-                  className="ml-2 mb-3 rounded-2xl w-[120] h-[200]"
+                  className="rounded-2xl w-[120] h-[200] mx-1"
                   source={
                     item.poster_path
                       ? {
@@ -38,8 +38,8 @@ const MovieCard = ({items, title}) => {
                 />
 
                 {!item.poster_path && (
-                  <View className="absolute w-[110] self-center items-center mt-3">
-                    <Text className="ml-1">{item.title}</Text>
+                  <View className="">
+                    <Text className="">{item.title}</Text>
                   </View>
                 )}
               </TouchableOpacity>
@@ -47,8 +47,8 @@ const MovieCard = ({items, title}) => {
           }}
         />
       </View>
-    </View>
+    </>
   );
 };
 
-export default MovieCard;
+export default memo(MovieCard);

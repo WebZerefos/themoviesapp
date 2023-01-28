@@ -3,17 +3,15 @@ import {
   View,
   Dimensions,
   Image,
-  Text,
-  FlatList,
   ScrollView,
+  SafeAreaView,
+  Text,
 } from 'react-native';
 import React, {memo, useEffect, useState} from 'react';
-import Carousel from 'react-native-reanimated-carousel';
 
 import {getPopularMovies, getUpcomingMovies} from '../../Services/services';
 import MovieCard from '../../components/MovieCard';
-
-const {width, height} = Dimensions.get('window');
+import MovieCarousel from '../../components/MovieCarousel';
 
 const Home = () => {
   const [moviesImages, setMoviesImages] = useState([]);
@@ -50,28 +48,17 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <View className="flex-1 items-center justify-center mt-36">
-        <Carousel
-          loop
-          width={width}
-          height={height}
-          autoPlay={true}
-          data={moviesImages}
-          scrollAnimationDuration={1000}
-          onSnapToItem={index => index}
-          renderItem={({item}) => (
-            <View>
-              <Image source={{uri: item}} className="h-[83%]" />
-            </View>
-          )}
-        />
-      </View>
-
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View className="flex-1">
-        <MovieCard title={'Popular Movies'} items={popularMovies} />
+        <MovieCarousel moviesImages={moviesImages} />
+
+        <View className="flex-1">
+          <MovieCard title={'Popular'} items={popularMovies} />
+          <MovieCard title={'Popular'} items={popularMovies} />
+          <MovieCard title={'Popular'} items={popularMovies} />
+        </View>
       </View>
-    </>
+    </ScrollView>
   );
 };
 
