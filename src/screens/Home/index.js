@@ -1,49 +1,63 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  View,
-  Dimensions,
-  Image,
-  ScrollView,
-  SafeAreaView,
-  Text,
-} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import React, {memo, useEffect, useState} from 'react';
 
-import {getPopularMovies, getUpcomingMovies} from '../../Services/services';
 import MovieCard from '../../components/MovieCard';
 import MovieCarousel from '../../components/MovieCarousel';
+
+import {
+  getDocumentaryMovies,
+  getFamilyMovies,
+  getPopularMovies,
+  getPopularTv,
+  getUpcomingMovies,
+} from '../../Services/services';
 
 const Home = () => {
   const [moviesImages, setMoviesImages] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
+  const [popularTv, setPopularTv] = useState([]);
+  const [familyMovies, setFamilyMovies] = useState([]);
+  const [documentaryMovies, setDocumentaryMovies] = useState([]);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    getPopularMovies()
-      .then(items => {
-        setPopularMovies(items);
-      })
-      .catch(err => {
-        setError(err);
-        console.log('ERROR >>>', error.message);
-      });
-  }, []);
+  const getData = () => {
+    return Promise.all([
+      getUpcomingMovies(),
+      getPopularMovies(),
+      getPopularTv(),
+      getFamilyMovies(),
+      getDocumentaryMovies(),
+    ]);
+  };
 
   useEffect(() => {
-    getUpcomingMovies()
-      .then(items => {
-        const moviesImagesArray = [];
-        items.forEach(item => {
-          moviesImagesArray.push(
-            `https://image.tmdb.org/t/p/w500${item.poster_path}`,
-          );
-        });
+    getData()
+      .then(
+        ([
+          upcomingMoviesData,
+          popularMoviesData,
+          popularTvData,
+          familyMoviesData,
+          documentaryMoviesData,
+        ]) => {
+          const moviesImagesArray = [];
+          upcomingMoviesData.forEach(item => {
+            moviesImagesArray.push(
+              `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+            );
+          });
 
-        setMoviesImages(moviesImagesArray);
-      })
+          setMoviesImages(moviesImagesArray);
+          setPopularMovies(popularMoviesData);
+          setPopularTv(popularTvData);
+          setFamilyMovies(familyMoviesData);
+          setDocumentaryMovies(documentaryMoviesData);
+        },
+      )
       .catch(err => {
         setError(err);
-        console.log('ERROR >>>', error.message);
+        console.log('Error >> ', error.message);
       });
   }, []);
 
@@ -53,9 +67,10 @@ const Home = () => {
         <MovieCarousel moviesImages={moviesImages} />
 
         <View className="flex-1">
-          <MovieCard title={'Popular'} items={popularMovies} />
-          <MovieCard title={'Popular'} items={popularMovies} />
-          <MovieCard title={'Popular'} items={popularMovies} />
+          <MovieCard title={'Popular Movies'} items={popularMovies} />
+          <MovieCard title={'Popular TV Shows'} items={popularTv} />
+          <MovieCard title={'Family Movies'} items={familyMovies} />
+          <MovieCard title={'Documentary Movies'} items={documentaryMovies} />
         </View>
       </View>
     </ScrollView>

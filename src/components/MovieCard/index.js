@@ -1,18 +1,11 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import React, {memo} from 'react';
 
 const MovieCard = ({items, title}) => {
   return (
     <>
       <View>
-        <Text className="text-lg ml-6 my-2 font-semibold tracking-widest">
+        <Text className="text-lg ml-6 my-2 font-semibold tracking-widest text-zinc-800">
           {title}
         </Text>
       </View>
@@ -21,8 +14,8 @@ const MovieCard = ({items, title}) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           data={items}
-          keyExtractor={item => String(item.id)}
-          renderItem={({item}) => {
+          keyExtractor={index => String(index.id)}
+          renderItem={({item, index}) => {
             return (
               <TouchableOpacity>
                 <Image
