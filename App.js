@@ -1,15 +1,21 @@
 import 'react-native-gesture-handler';
 import React, {memo} from 'react';
-import {StatusBar, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {StatusBar} from 'react-native';
 
 import Home from './src/screens/Home';
 
+const Stack = createStackNavigator();
+
 const App = () => {
   return (
-    <View className="flex-1">
-      <Home />
+    <NavigationContainer>
       <StatusBar barStyle={'light-content'} />
-    </View>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
