@@ -3,6 +3,15 @@ import axios from 'axios';
 const baseUrl = 'https://api.themoviedb.org/3/';
 const apiKey = 'fecd7450ab2f3fb03c1527ccc730a3aa';
 
+// Get Playing Now
+export const getPlayingNow = async () => {
+  const response = await axios.get(
+    `${baseUrl}movie/now_playing?api_key=${apiKey}&language=pt-BR`,
+  );
+
+  return response?.data?.results;
+};
+
 // Get popular movies
 export const getPopularMovies = async () => {
   const response = await axios.get(

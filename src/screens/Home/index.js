@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, ActivityIndicator} from 'react-native';
 import React, {memo, useEffect, useState} from 'react';
 
 import MovieCard from '../../components/MovieCard';
@@ -8,22 +8,27 @@ import MovieCarousel from '../../components/MovieCarousel';
 import {
   getDocumentaryMovies,
   getFamilyMovies,
+  getPlayingNow,
   getPopularMovies,
   getPopularTv,
   getUpcomingMovies,
 } from '../../Services/services';
+import Error from '../../components/Error';
 
 const Home = () => {
-  const [moviesImages, setMoviesImages] = useState([]);
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [popularTv, setPopularTv] = useState([]);
-  const [familyMovies, setFamilyMovies] = useState([]);
-  const [documentaryMovies, setDocumentaryMovies] = useState([]);
+  const [moviesImages, setMoviesImages] = useState();
+  const [playingNow, setPlayingNow] = useState();
+  const [popularMovies, setPopularMovies] = useState();
+  const [popularTv, setPopularTv] = useState();
+  const [familyMovies, setFamilyMovies] = useState();
+  const [documentaryMovies, setDocumentaryMovies] = useState();
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getData = () => {
     return Promise.all([
       getUpcomingMovies(),
+      getPlayingNow(),
       getPopularMovies(),
       getPopularTv(),
       getFamilyMovies(),
@@ -36,6 +41,7 @@ const Home = () => {
       .then(
         ([
           upcomingMoviesData,
+          playingNowData,
           popularMoviesData,
           popularTvData,
           familyMoviesData,
@@ -49,31 +55,50 @@ const Home = () => {
           });
 
           setMoviesImages(moviesImagesArray);
+          setPlayingNow(playingNowData);
           setPopularMovies(popularMoviesData);
           setPopularTv(popularTvData);
           setFamilyMovies(familyMoviesData);
           setDocumentaryMovies(documentaryMoviesData);
         },
       )
-      .catch(err => {
-        setError(err);
-        console.log('Error >> ', error.message);
+      .catch(() => {
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(true);
       });
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View className="flex-1">
-        <MovieCarousel moviesImages={moviesImages} />
+    <>
+      {loading && !error && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View className="flex-1">
+            <MovieCarousel moviesImages={moviesImages} />
 
-        <View className="flex-1">
-          <MovieCard title={'Popular Movies'} items={popularMovies} />
-          <MovieCard title={'Popular TV Shows'} items={popularTv} />
-          <MovieCard title={'Family Movies'} items={familyMovies} />
-          <MovieCard title={'Documentary Movies'} items={documentaryMovies} />
-        </View>
-      </View>
-    </ScrollView>
+            <View className="flex-1">
+              <MovieCard title={'Movies Playing Now'} items={playingNow} />
+              <MovieCard title={'Popular TV Shows'} items={popularTv} />
+              <MovieCard title={'Popular Movies'} items={popularMovies} />
+              <MovieCard title={'Family Movies'} items={familyMovies} />
+              <MovieCard
+                title={'Documentary Movies'}
+                items={documentaryMovies}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      )}
+      {!loading && (
+        <ActivityIndicator
+          className="flex-1 justify-center items-center"
+          size="large"
+          color="#449cc6"
+        />
+      )}
+      {error && <Error />}
+    </>
   );
 };
 
