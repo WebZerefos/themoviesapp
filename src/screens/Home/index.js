@@ -2,8 +2,9 @@
 import {View, ScrollView, ActivityIndicator} from 'react-native';
 import React, {memo, useEffect, useState} from 'react';
 
-import MovieCard from '../../components/MovieCard';
 import MovieCarousel from '../../components/MovieCarousel';
+import MovieCardList from '../../components/MovieCardList';
+import Error from '../../components/Error';
 
 import {
   getDocumentaryMovies,
@@ -13,7 +14,6 @@ import {
   getPopularTv,
   getUpcomingMovies,
 } from '../../Services/services';
-import Error from '../../components/Error';
 
 const Home = ({navigation}) => {
   const [moviesImages, setMoviesImages] = useState();
@@ -78,17 +78,42 @@ const Home = ({navigation}) => {
             <MovieCarousel moviesImages={moviesImages} />
 
             <View className="flex-1">
-              <MovieCard
-                title={'Movies Playing Now'}
-                items={playingNow}
-                onPress={() => navigation.navigate('Detail')}
+              <MovieCardList
+                title="Movies Playing Now"
+                item={playingNow}
+                navigation={navigation}
               />
-              <MovieCard title={'Popular TV Shows'} items={popularTv} />
-              <MovieCard title={'Popular Movies'} items={popularMovies} />
-              <MovieCard title={'Family Movies'} items={familyMovies} />
-              <MovieCard
-                title={'Documentary Movies'}
-                items={documentaryMovies}
+            </View>
+
+            <View className="flex-1">
+              <MovieCardList
+                title="Popular Movies"
+                item={popularMovies}
+                navigation={navigation}
+              />
+            </View>
+
+            <View className="flex-1">
+              <MovieCardList
+                title="Family Movies"
+                item={familyMovies}
+                navigation={navigation}
+              />
+            </View>
+
+            <View className="flex-1">
+              <MovieCardList
+                title="Documentary Movies"
+                item={documentaryMovies}
+                navigation={navigation}
+              />
+            </View>
+
+            <View className="flex-1">
+              <MovieCardList
+                title="Popular TV"
+                item={popularTv}
+                navigation={navigation}
               />
             </View>
           </View>

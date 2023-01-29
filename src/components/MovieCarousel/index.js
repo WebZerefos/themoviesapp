@@ -1,10 +1,10 @@
 import {View, Dimensions, Image} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import React, {PureComponent} from 'react';
+import React, {memo, PureComponent} from 'react';
 
 const {width, height} = Dimensions.get('window');
 
-export default class MovieCarousel extends PureComponent {
+export class MovieCarousel extends PureComponent {
   render() {
     const {moviesImages} = this.props;
     return (
@@ -29,3 +29,5 @@ export default class MovieCarousel extends PureComponent {
     );
   }
 }
+
+export default memo(MovieCarousel);
