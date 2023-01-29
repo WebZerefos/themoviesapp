@@ -15,7 +15,7 @@ import {
 } from '../../Services/services';
 import Error from '../../components/Error';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [moviesImages, setMoviesImages] = useState();
   const [playingNow, setPlayingNow] = useState();
   const [popularMovies, setPopularMovies] = useState();
@@ -78,7 +78,11 @@ const Home = () => {
             <MovieCarousel moviesImages={moviesImages} />
 
             <View className="flex-1">
-              <MovieCard title={'Movies Playing Now'} items={playingNow} />
+              <MovieCard
+                title={'Movies Playing Now'}
+                items={playingNow}
+                onPress={() => navigation.navigate('Detail')}
+              />
               <MovieCard title={'Popular TV Shows'} items={popularTv} />
               <MovieCard title={'Popular Movies'} items={popularMovies} />
               <MovieCard title={'Family Movies'} items={familyMovies} />
