@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {TMDB_API} from '@env';
 
 const baseUrl = 'https://api.themoviedb.org/3/';
-const apiKey = 'fecd7450ab2f3fb03c1527ccc730a3aa';
+const apiKey = TMDB_API;
 
 // Get Playing Now
 export const getPlayingNow = async () => {
