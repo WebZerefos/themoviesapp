@@ -7,7 +7,7 @@ export class MovieCard extends PureComponent {
     const {navigation, item} = this.props;
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('Detail', {movieDetail: item})}>
+        onPress={() => navigation.navigate('Detail', {movieId: item.id})}>
         <Image
           resizeMode="cover"
           className="rounded-2xl w-[120] h-[200] mx-1"

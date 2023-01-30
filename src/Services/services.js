@@ -57,3 +57,21 @@ export const getDocumentaryMovies = async () => {
 
   return response?.data?.results;
 };
+
+// Get  Movie Details
+export const getMovie = async id => {
+  const response = await axios.get(
+    `${baseUrl}/movie/${id}?api_key=${apiKey}&language=pt-BR`,
+  );
+
+  return response?.data;
+};
+
+// // Get  TV Details
+// export const getTv = async id => {
+//   const response = await axios.get(
+//     `${baseUrl}discover/tv/${id}?api_key=${apiKey}&language=pt-BR`,
+//   );
+
+//   return response?.data;
+// };
