@@ -12,6 +12,7 @@ import moment from 'moment';
 
 import {getMovie} from '../../Services/services';
 import Rating from '../../components/Rating';
+import PlayButton from '../../components/PlayButton';
 
 const height = Dimensions.get('window').height;
 
@@ -46,6 +47,7 @@ const Detail = ({route}) => {
 
           {movieDetail.genres && (
             <View className="flex-1 items-center gap-2 mt-3">
+              <PlayButton />
               <Text className="text-lg font-bold">{movieDetail.title}</Text>
 
               <View className="flex-1 flex-row gap-2 mb-3">
