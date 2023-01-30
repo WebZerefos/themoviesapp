@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
@@ -13,14 +14,19 @@ import moment from 'moment';
 import {getMovie} from '../../Services/services';
 import Rating from '../../components/Rating';
 import PlayButton from '../../components/PlayButton';
+import Video from '../../components/Video';
 
 const height = Dimensions.get('window').height;
 
-const Detail = ({route}) => {
+const Detail = ({route, navigation}) => {
   const movieId = route?.params.movieId || {};
-
   const [movieDetail, setMovieDetail] = useState();
   const [loaded, setLoaded] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const videoShown = () => {
+    setModalVisible(!modalVisible);
+  };
 
   useEffect(() => {
     getMovie(movieId).then(movie => {
@@ -30,44 +36,53 @@ const Detail = ({route}) => {
   }, [movieId, setMovieDetail]);
 
   return (
-    <ScrollView className="flex-1 bg-white">
+    <View className="flex-1 bg-white">
       {loaded && (
-        <ScrollView>
-          <Image
-            height={height / 2.3}
-            resizeMode="cover"
-            source={
-              movieDetail.poster_path
-                ? {
-                    uri: `https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`,
-                  }
-                : require('../../assets/images/placeholder.png')
-            }
-          />
+        <View>
+          <ScrollView>
+            <Image
+              height={height / 2.3}
+              resizeMode="cover"
+              source={
+                movieDetail.poster_path
+                  ? {
+                      uri: `https://image.tmdb.org/t/p/w500${movieDetail.backdrop_path}`,
+                    }
+                  : require('../../assets/images/placeholder.png')
+              }
+            />
 
-          {movieDetail.genres && (
-            <View className="flex-1 items-center gap-2 mt-3">
-              <PlayButton />
-              <Text className="text-lg font-bold">{movieDetail.title}</Text>
+            {movieDetail.genres && (
+              <View className="flex-1 items-center gap-2 mt-3">
+                <PlayButton onPress={() => setModalVisible(!modalVisible)} />
 
-              <View className="flex-1 flex-row gap-2 mb-3">
-                {movieDetail.genres.map(genre => (
-                  <Text key={genre.id}>{genre.name}</Text>
-                ))}
+                <Text className="text-lg font-bold">{movieDetail.title}</Text>
+
+                <View className="flex-1 flex-row gap-2 mb-3">
+                  {movieDetail.genres.map(genre => (
+                    <Text key={genre.id}>{genre.name}</Text>
+                  ))}
+                </View>
+
+                <Rating rating={movieDetail.vote_average / 2} />
+
+                <Text className="text-sm p-3 text-center">
+                  {movieDetail.overview}
+                </Text>
+
+                <Text className="text-sm font-bold ">
+                  {'Data lançamento: ' +
+                    moment(movieDetail.release_date).format('DD-MM-YYYY')}
+                </Text>
               </View>
+            )}
+          </ScrollView>
 
-              <Rating rating={movieDetail.vote_average / 2} />
-
-              <Text className="text-sm p-3 text-center">
-                {movieDetail.overview}
-              </Text>
-
-              <Text className="text-sm font-bold ">
-                {'Data lançamento: ' +
-                  moment(movieDetail.release_date).format('DD-MM-YYYY')}
-              </Text>
-            </View>
-          )}
+          <Modal
+            supportedOrientations={['portrait', 'landscape']}
+            visible={modalVisible}>
+            <Video onClose={videoShown} />
+          </Modal>
 
           {/* If any error */}
           {!movieDetail.poster_path && (
@@ -86,9 +101,9 @@ const Detail = ({route}) => {
               color="#449cc6"
             />
           )}
-        </ScrollView>
+        </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
