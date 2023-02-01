@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
+
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 
@@ -33,12 +34,12 @@ const Detail = ({route, navigation}) => {
       setMovieDetail(movie);
       setLoaded(true);
     });
-  }, [movieId, setMovieDetail]);
+  }, []);
 
   return (
     <View className="flex-1 bg-white">
       {loaded && (
-        <View>
+        <View className="flex-1">
           <ScrollView>
             <Image
               height={height / 2.3}

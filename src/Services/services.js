@@ -67,11 +67,11 @@ export const getMovie = async id => {
   return response?.data;
 };
 
-// // Get  TV Details
-// export const getTv = async id => {
-//   const response = await axios.get(
-//     `${baseUrl}discover/tv/${id}?api_key=${apiKey}&language=pt-BR`,
-//   );
+// Search for movie or tv
+export const SearchTMDB = async (query, type) => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/search/${type}?api_key=fecd7450ab2f3fb03c1527ccc730a3aa&query=${query}&language=pt-BR`,
+  );
 
-//   return response?.data;
-// };
+  return response?.data.results;
+};

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {View, ScrollView, ActivityIndicator} from 'react-native';
 import React, {memo, useEffect, useState} from 'react';
 
